@@ -8,6 +8,22 @@ jobs:
   reports:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: stock_db
+          MYSQL_USER: root
+          MYSQL_PASSWORD: passer123
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install pytest pytest-cov pytest-html
+          pip install pytest pytest-cov pytest-html mysql-connector-python
 
       - name: Run Pytest with reports
         env:

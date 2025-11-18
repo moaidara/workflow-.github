@@ -1,3 +1,12 @@
+import os
+import pytest
+
+pytestmark = pytest.mark.skipif(
+    os.getenv("CI") == "true",
+    reason="Skip DB tests in CI where no MySQL server is available."
+)
+
+
 # tests/test_stock_manager.py
 import unittest
 from src.database import init_db, get_connection

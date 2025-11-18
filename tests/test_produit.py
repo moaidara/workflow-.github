@@ -1,7 +1,14 @@
 # tests/test_produit.py
 import unittest
+import os
+import pytest
 from src.database import init_db, get_connection
 from src.produit import Produit
+
+pytestmark = pytest.mark.skipif(
+    os.getenv("CI") == "true",
+    reason="Skip DB tests in CI where no MySQL server is available."
+)
 
 class ProduitTest(unittest.TestCase):
 
